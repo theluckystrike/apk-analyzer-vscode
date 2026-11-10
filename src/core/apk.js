@@ -276,7 +276,7 @@ function buildModel(src, arc, kind, fileName, L, budget, prefix) {
     if (D.compileSdk) lines.push(['Compile SDK', sdkText(D.compileSdk)]);
     lines.push(['Debuggable', D.debuggable ? 'yes (android:debuggable="true")' : 'no']);
     for (const [k, v] of D.appFlags || []) lines.push([k, v]);
-    const dang = permRows.filter((r) => r[1] === 'dangerous').length;
+    const dang = permRows.filter((r) => r[1] === 'dangerous' && !String(r[2]).startsWith('implied')).length;
     lines.push(['Permissions', `${D.permissions.length} requested${dang ? `, ${dang} dangerous` : ''}`]);
     const count = (t) => D.components.filter((c) => c.type === t || (t === 'activity' && c.type === 'activity-alias'));
     const exp = (l) => l.filter((c) => c.exported.startsWith('yes')).length;
@@ -330,6 +330,9 @@ function readManifest(m, root, D, permRows) {
       permRows.push([a(c, 'name'), `declared here (${a(c, 'protectionLevel') || 'normal'})`, 'permission', '']);
     }
   }
+  // Android grants READ_EXTERNAL_STORAGE with WRITE_EXTERNAL_STORAGE; aapt lists it as an implied permission.
+  const w = permRows.find((r) => r[0] === 'android.permission.WRITE_EXTERNAL_STORAGE');
+  if (w && !seen.has('android.permission.READ_EXTERNAL_STORAGE')) permRows.push(['android.permission.READ_EXTERNAL_STORAGE', 'dangerous', 'implied by WRITE_EXTERNAL_STORAGE', w[3]]);
   if (!app) return;
   for (const c of app.children) {
     if (!COMPONENTS.includes(c.tag)) continue;

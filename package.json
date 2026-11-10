@@ -243,7 +243,7 @@
           {
             "id": "dex",
             "title": "DEX method counts and APK size",
-            "description": "DEX shows the method references of each classes.dex against the 65,536 limit, Packages shows the counts as a tree, and Size by folder and File types show where the bytes go. The hex link on the Files tab shows the unpacked bytes of any file.\n[Open the sample APK](command:apkAnalyzer.openSample)",
+            "description": "DEX shows the method references of each classes.dex against the 65,536 limit, Packages shows the counts as a tree, and Folders and Types show where the bytes go. The hex link on the Files tab shows the unpacked bytes of any file.\n[Open the sample APK](command:apkAnalyzer.openSample)",
             "media": {
               "markdown": "walkthrough/dex.md"
             }

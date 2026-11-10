@@ -203,6 +203,14 @@ test('APK model: summary, dangerous permissions, exported flags with reasons, AB
   assert.strictEqual(table(m, 'files').entries.length, table(m, 'files').rows.length);
 });
 
+test('APK model: WRITE_EXTERNAL_STORAGE adds the implied READ_EXTERNAL_STORAGE row (as aapt lists it)', () => {
+  const m = parse(B.apk({ manifest: { perms: ['android.permission.WRITE_EXTERNAL_STORAGE'] } }));
+  const rows = table(m, 'permissions').rows;
+  assert.deepStrictEqual(rows.find((r) => r[0].endsWith('READ_EXTERNAL_STORAGE')).slice(1, 3), ['dangerous', 'implied by WRITE_EXTERNAL_STORAGE']);
+  assert.match(sum(m, 'Permissions'), /^1 requested, 1 dangerous$/);
+  assert.deepStrictEqual(m.data.permissions, ['android.permission.WRITE_EXTERNAL_STORAGE']);
+});
+
 test('APK model: targetSdk 31+ with an intent filter and no exported attribute is named as an install error', () => {
   const m = parse(B.apk({ manifest: { target: 33 } }));
   const r = table(m, 'components').rows.find((x) => x[1] === 'com.zovo.demo.BootReceiver');

@@ -56,7 +56,7 @@
   }
 
   const ORDER = ['permissions', 'components', 'dex', 'packages', 'classes', 'folders', 'types', 'files', 'natives', 'inner', 'signing'];
-  const SHORT = { permissions: 'Permissions', components: 'Components', dex: 'DEX', packages: 'Packages', classes: 'Classes', folders: 'Size by folder', types: 'File types', files: 'Files', natives: 'Native libs', inner: 'APKs', signing: 'Signing' };
+  const SHORT = { permissions: 'Permissions', components: 'Components', dex: 'DEX', packages: 'Packages', classes: 'Classes', folders: 'Folders', types: 'Types', files: 'Files', natives: 'Native', inner: 'APKs', signing: 'Signing' };
   function tabList() {
     const m = S.model;
     if (!m) return [['overview', 'Overview']];
@@ -102,7 +102,7 @@
   function overview() {
     const m = S.model, d = m.data || {};
     const perms = tableById('permissions');
-    const dang = perms ? perms.rows.filter((r) => r[1] === 'dangerous').length : 0;
+    const dang = perms ? perms.rows.filter((r) => r[1] === 'dangerous' && !String(r[2]).startsWith('implied')).length : 0;
     const exported = (d.components || []).filter((c) => String(c.exported).startsWith('yes')).length;
     const refs = (d.dex || []).reduce((a, x) => a + x.methodRefs, 0);
     const maxRefs = (d.dex || []).reduce((a, x) => Math.max(a, x.methodRefs), 0);
@@ -347,11 +347,11 @@
       d.removed.length ? h('ul', { class: 'diff del' }, ...d.removed.slice(0, 2000).map((k) => h('li', { text: k }))) : null) : h('p', { class: 'muted', text: `${title}: the same (${fmtInt(d.same)}).` }));
     const grid4 = 'grid-template-columns: minmax(200px, 3fr) minmax(90px, 1fr) minmax(90px, 1fr) minmax(90px, 1fr)';
     const dtable = (title, rows, key, f) => (rows.length ? h('section', {}, h('h3', { text: title }),
-      h('div', { class: 'thead', style: grid4 }, h('span', { class: 'th', text: key }), h('span', { class: 'th', text: nameA }), h('span', { class: 'th', text: nameB }), h('span', { class: 'th', text: 'Change' })),
+      h('div', { class: 'thead', style: grid4 }, h('span', { class: 'th', text: key }), h('span', { class: 'th', text: 'Before', title: nameA }), h('span', { class: 'th', text: 'After', title: nameB }), h('span', { class: 'th', text: 'Change' })),
       h('div', { class: 'tbody plain short' }, ...rows.slice(0, 300).map((x) => h('div', { class: 'tr', style: grid4 }, h('span', { class: 'td', text: x.folder || x.path || x.pkg }), h('span', { class: 'td num', text: f(x.a) }), h('span', { class: 'td num', text: f(x.b) }), h('span', { class: 'td num ' + (x.delta > 0 ? 'up' : 'down'), text: fmtDelta(x.delta, f) }))))) : null);
     return h('div', { class: 'pad' },
       h('div', { class: 'tools' }, h('b', { text: `${nameA} compared with ${nameB}` }), h('button', { class: 'btn small', onclick: () => post({ type: 'saveCompare' }) }, 'Open as Markdown')),
-      h('p', { text: `File size ${fmtSize(r.size.a)} → ${fmtSize(r.size.b)} (${fmtDelta(r.size.delta, fmtSize)}). Method refs ${fmtInt(r.dex.a.refs)} → ${fmtInt(r.dex.b.refs)} (${fmtDelta(r.dex.b.refs - r.dex.a.refs)}).` }),
+      h('p', { text: `Before is ${nameA}, after is ${nameB}. File size ${fmtSize(r.size.a)} → ${fmtSize(r.size.b)} (${fmtDelta(r.size.delta, fmtSize)}). Method refs ${fmtInt(r.dex.a.refs)} → ${fmtInt(r.dex.b.refs)} (${fmtDelta(r.dex.b.refs - r.dex.a.refs)}).` }),
       r.header.length ? h('section', {}, h('h3', { text: 'Manifest and signing' }), h('table', { class: 'kv' }, h('tbody', {}, ...r.header.map((x) => h('tr', {}, h('th', { text: x.name }), h('td', { text: `${x.a || '(none)'} → ${x.b || '(none)'}` })))))) : h('p', { class: 'muted', text: 'Package, versions, SDK levels, ABIs and signing are the same.' }),
       list('Permissions', r.permissions), list('Components', r.components),
       r.components.exportChanged.length ? h('section', {}, h('h3', { text: 'Exported flag changed' }), h('ul', { class: 'diff' }, ...r.components.exportChanged.map((c) => h('li', { text: `${c.key}: ${c.a} → ${c.b}` })))) : null,

@@ -19,8 +19,8 @@ h3 { font-size: 13px; font-weight: 600; margin: 16px 0 6px; }
 .menu button { display: block; width: 100%; text-align: left; background: none; border: 0; color: inherit; padding: 5px 12px; font: inherit; cursor: pointer; }
 .menu button:hover { background: var(--vscode-menu-selectionBackground, var(--vscode-list-hoverBackground)); color: var(--vscode-menu-selectionForeground, inherit); }
 .slice { background: var(--vscode-dropdown-background); color: var(--vscode-dropdown-foreground); border: 1px solid var(--vscode-dropdown-border); padding: 2px 4px; }
-.tabs { display: flex; gap: 0; padding: 0 8px; border-bottom: 1px solid var(--vscode-panel-border, transparent); overflow-x: auto; flex: none; }
-.tab { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--vscode-descriptionForeground); padding: 6px 10px; cursor: pointer; font: inherit; white-space: nowrap; }
+.tabs { display: flex; flex-wrap: wrap; gap: 0; padding: 0 8px; border-bottom: 1px solid var(--vscode-panel-border, transparent); flex: none; }
+.tab { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--vscode-descriptionForeground); padding: 6px 9px; cursor: pointer; font: inherit; white-space: nowrap; }
 .tab.on { color: var(--vscode-foreground); border-bottom-color: var(--vscode-focusBorder); }
 .tab .count { margin-left: 6px; font-size: 11px; padding: 0 5px; border-radius: 8px; background: var(--vscode-badge-background); color: var(--vscode-badge-foreground); }
 .view { flex: 1; min-height: 0; display: flex; flex-direction: column; }

@@ -15,8 +15,8 @@ It is read-only and works offline: no network calls, no telemetry, no Android SD
 - DEX: each `classes*.dex` with its version, class count, defined methods, method references and the share of the 65,536 limit, plus field, string, type and prototype counts.
 - Packages: method counts as a tree with totals per package (classes, defined methods, method references), the way the classic dex method count tools show them.
 - Classes: every class the DEX files define, with its package, method and field counts, access flags and superclass.
-- Size by folder, File types and Files: compressed and unpacked size of every folder (subfolders included), every file type and every file, largest first. Sort and filter any column.
-- Native libs: the ABIs under `lib/` with their libraries and sizes.
+- Folders, Types and Files: compressed and unpacked size of every folder (subfolders included), every file type and every file, largest first. Sort and filter any column.
+- Native: the ABIs under `lib/` with their libraries and sizes.
 - Signing: v1 (JAR) signature files, the APK Signing Block with its v2, v3 and v3.1 blocks (found by its magic before the central directory), and the signer certificate: SHA-256, SHA-1, subject, issuer, validity and key type. The extension shows the signature data; it does not verify signatures.
 - Hex: the bytes of the whole file, or the unpacked bytes of any entry (the hex link on the Files tab).
 

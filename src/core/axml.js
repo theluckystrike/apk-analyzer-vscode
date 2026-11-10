@@ -181,7 +181,7 @@ function decodeAxml(bytes, limits = {}) {
   }
   if (stack.length > 1) warn('The manifest ends before all its elements are closed.');
   const top = root.children.find((c) => c.tag);
-  if (!top) throw new AxmlError('The manifest has no elements.');
+  if (!top) throw new AxmlError(`The manifest has no elements${warnings.length ? ` (${warnings[0].replace(/\.$/, '')})` : ''}.`);
   return { root: top, xml: toXml(top, L.maxXml, warn), warnings, strings: strings.count };
 }
 

@@ -57,7 +57,11 @@ function readZip(src, limits = {}) {
   const L = { ...ZIP_LIMITS, ...limits };
   if (src.size < 22) throw new ZipError('This file is too small to be an APK (an APK is a ZIP archive).', 'NOT_ZIP');
   const end = findEnd(src);
-  if (!end) throw new ZipError('This is not a ZIP archive, so it is not an APK: the end-of-archive record is missing. The file may be cut short.', 'NOT_ZIP');
+  if (!end) {
+    const h = src.bytesUpTo(0, 4);
+    if (h.length === 4 && u32(h, 0) === SIG_LOC) throw new ZipError('The file starts like a ZIP archive (an APK is one), but its end-of-archive record is missing: the file is cut short or damaged.', 'DAMAGED');
+    throw new ZipError('This is not a ZIP archive, so it is not an APK: the end-of-archive record is missing.', 'NOT_ZIP');
+  }
   const { b, i } = end;
   let count = u16(b, i + 10), cdSize = u32(b, i + 12), cdOffset = u32(b, i + 16);
   let zip64 = false;
