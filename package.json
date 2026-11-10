@@ -1,0 +1,273 @@
+{
+  "name": "zovo-apk-analyzer",
+  "displayName": "APK Analyzer & APK Viewer (AndroidManifest, DEX Method Count, APK Size)",
+  "description": "APK analyzer and APK viewer for VS Code: open an .apk file and read the decoded AndroidManifest.xml, permissions (dangerous ones flagged), exported activities and services, DEX method counts by package against the 65,536 limit, APK size by folder and file type, native ABIs and the signing certificate. Also reads .aab, .apks and .xapk. Read-only, no network.",
+  "version": "0.1.0",
+  "publisher": "zovo",
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1B2A4A",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theluckystrike/apk-analyzer-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/theluckystrike/apk-analyzer-vscode/issues"
+  },
+  "homepage": "https://github.com/theluckystrike/apk-analyzer-vscode#readme",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Visualization",
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "apk analyzer",
+    "apk viewer",
+    "apk inspector",
+    "android manifest viewer",
+    "androidmanifest",
+    "dex viewer",
+    "dex method count",
+    "apk size",
+    "android",
+    "apk",
+    "aab",
+    "xapk",
+    "apks",
+    "dex",
+    "androidmanifest.xml",
+    "manifest",
+    "permissions",
+    "65k",
+    "multidex",
+    "method count",
+    "signing certificate",
+    "binary xml",
+    "axml",
+    "classes.dex",
+    "app size"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "apkAnalyzer.apk",
+        "displayName": "APK Analyzer",
+        "selector": [
+          {
+            "filenamePattern": "*.apk"
+          },
+          {
+            "filenamePattern": "*.aab"
+          },
+          {
+            "filenamePattern": "*.apks"
+          },
+          {
+            "filenamePattern": "*.xapk"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "apkAnalyzer.any",
+        "displayName": "APK Analyzer (any file)",
+        "selector": [
+          {
+            "filenamePattern": "*"
+          }
+        ],
+        "priority": "option"
+      }
+    ],
+    "commands": [
+      {
+        "command": "apkAnalyzer.open",
+        "title": "Open in APK Analyzer",
+        "category": "APK Analyzer",
+        "icon": "$(package)"
+      },
+      {
+        "command": "apkAnalyzer.openSample",
+        "title": "Open a sample APK",
+        "category": "APK Analyzer"
+      },
+      {
+        "command": "apkAnalyzer.openWalkthrough",
+        "title": "Get started",
+        "category": "APK Analyzer"
+      },
+      {
+        "command": "apkAnalyzer.exportReport",
+        "title": "Export the APK report: JSON, Markdown or CSV (Pro)",
+        "category": "APK Analyzer"
+      },
+      {
+        "command": "apkAnalyzer.compare",
+        "title": "Compare two APKs (Pro)",
+        "category": "APK Analyzer"
+      },
+      {
+        "command": "apkAnalyzer.findInDex",
+        "title": "Find a class, method or string in the DEX files (Pro)",
+        "category": "APK Analyzer"
+      },
+      {
+        "command": "apkAnalyzer.supportDeveloper",
+        "title": "Support the developer",
+        "category": "APK Analyzer"
+      },
+      {
+        "command": "apkAnalyzer.moreViewers",
+        "title": "More free viewers",
+        "category": "APK Analyzer"
+      },
+      {
+        "command": "apkAnalyzer.getPro",
+        "title": "Get Zovo Pro (USD 19 once, all 22 Zovo extensions)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "apkAnalyzer.payWithPayPal",
+        "title": "Pay for Zovo Pro with PayPal (USD 19, team of 5 USD 59)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "apkAnalyzer.unlockWithSponsors",
+        "title": "I already paid: unlock with GitHub Sponsors",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "apkAnalyzer.enterLicenseKey",
+        "title": "Enter Zovo Pro license key",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "apkAnalyzer.removeLicense",
+        "title": "Remove Zovo Pro from this editor",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "apkAnalyzer.payByCard",
+        "title": "Pay for Zovo Pro by card (USD 19)",
+        "category": "Zovo Pro"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "apkAnalyzer.open",
+          "when": "!explorerResourceIsFolder",
+          "group": "navigation@40"
+        },
+        {
+          "command": "apkAnalyzer.compare",
+          "when": "!explorerResourceIsFolder && resourceExtname =~ /^\\.(apk|aab|apks|xapk)$/i && config.apkAnalyzer.showProTools",
+          "group": "7_modification@40"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "apkAnalyzer.openSample",
+          "when": "true"
+        },
+        {
+          "command": "apkAnalyzer.exportReport",
+          "when": "config.apkAnalyzer.showProTools"
+        },
+        {
+          "command": "apkAnalyzer.compare",
+          "when": "config.apkAnalyzer.showProTools"
+        },
+        {
+          "command": "apkAnalyzer.findInDex",
+          "when": "config.apkAnalyzer.showProTools"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "APK Analyzer",
+      "properties": {
+        "apkAnalyzer.showProTools": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Export, Compare and Find in DEX buttons (Zovo Pro tools, 3 free tries each). Turn off to hide them."
+        },
+        "apkAnalyzer.showSupportLinks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the small Rate, More free viewers and support links at the bottom of the viewer."
+        },
+        "apkAnalyzer.askForRating": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask once, after a few days of use, whether you want to rate the extension. Never after an error."
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "apkAnalyzer.start",
+        "title": "APK Analyzer & APK Viewer",
+        "description": "Look inside Android APK files without leaving VS Code.",
+        "steps": [
+          {
+            "id": "open",
+            "title": "Open an APK",
+            "description": "Click any .apk file in the Explorer: it opens in APK Analyzer. .aab, .apks and .xapk files open too. The Overview tab shows the package, versions, SDK levels, permissions and signing.\n[Open the sample APK](command:apkAnalyzer.openSample)\n[Open a file...](command:apkAnalyzer.open)",
+            "media": {
+              "markdown": "walkthrough/open.md"
+            }
+          },
+          {
+            "id": "manifest",
+            "title": "Manifest, permissions and components",
+            "description": "The Manifest tab shows AndroidManifest.xml decoded from binary XML. Permissions flags the dangerous ones; Components lists every activity, service, receiver and provider and whether it is exported, and why.\n[Open the sample APK](command:apkAnalyzer.openSample)",
+            "media": {
+              "markdown": "walkthrough/manifest.md"
+            }
+          },
+          {
+            "id": "dex",
+            "title": "DEX method counts and APK size",
+            "description": "DEX shows the method references of each classes.dex against the 65,536 limit, Packages shows the counts as a tree, and Size by folder and File types show where the bytes go. The hex link on the Files tab shows the unpacked bytes of any file.\n[Open the sample APK](command:apkAnalyzer.openSample)",
+            "media": {
+              "markdown": "walkthrough/dex.md"
+            }
+          },
+          {
+            "id": "zovo-related",
+            "title": "Files that often come with Android packages",
+            "description": "If your project also has archives or binary files, these free Zovo extensions open them. A link opens the extension page, and you choose there whether to install it.\n[ZIP Explorer](command:extension.open?%5B%22zovo.zip-archive-explorer%22%5D)\n[Hex Viewer](command:extension.open?%5B%22zovo.zovo-hex-viewer%22%5D)",
+            "media": {
+              "markdown": "walkthrough/related.md"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node scripts/test.js",
+    "samples": "node scripts/make_samples.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "~1.90.0"
+  },
+  "sponsor": {
+    "url": "https://github.com/sponsors/theluckystrike/sponsorships?tier_id=679878"
+  }
+}
